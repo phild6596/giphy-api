@@ -39,7 +39,7 @@ function searchGiphs(term) {
             var gifHolder = $("<div class='gifRow'>");
             var img = "<img class='gifImg' data-moving='" + urlThumb + "' src='" + urlStill + "'>";
             var rated = "<p>Rating: " + rating.toUpperCase() + "</p>";
-            gifHolder.append(rated, img);
+            gifHolder.append(img, rated);
             $(".gif-results").append(gifHolder);
         }console.log(response);
     });
