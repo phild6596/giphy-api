@@ -9,26 +9,30 @@ $(document).ready(function() {
     "Star Wars",
     "Party",
     "The Godfather",
-    "NFL"];
-
+    "NFL",
+    "slash",
+    "funny",
+    "Thug Life",
+    "Funny Gym"];
+//Renders buttons on start from array and when new button is made
 function gifButtons() {
     for (var i = 0; i < giphy.length; i++) {
         var buttons = $("<button class='searchGif' id='"+giphy[i]+"'>" + giphy[i] + "</button>")
         buttons.appendTo("#gif-buttons");
-        //console.log(buttons);
-    } console.log(giphy);
+    }
 }gifButtons();
 
+//searches Giphy API for new buttons made
 function searchGiphs(term) {
     term = term.split(" ").join("%20");
-    var gifsDiv =$(giphy).attr("data-name");
-    var searchURL = "https://api.giphy.com/v1/gifs/search?api_key=" + apiKey + "&q=" + term + "&limit=10&offset=0&rating=&lang=en";
-
+    var gifsDiv = $(giphy).attr("data-name");
+    var searchURL = "https://api.giphy.com/v1/gifs/search?api_key=" + apiKey + "&q=" + term + "&limit=12&offset=0&rating=pg-13&lang=en";
+//Ajax call
     $.ajax({
         url: searchURL,
         method: "GET"
     }).done(function (response) {
-        for (j = 0; j < 10; j++) {
+        for (j = 0; j < 12; j++) {
             var rating = response.data[j].rating;
             var urlThumb = response.data[j].images.original.url;
             var urlStill = response.data[j].images.original_still.url;
@@ -37,24 +41,32 @@ function searchGiphs(term) {
             var rated = "<p>Rating: " + rating.toUpperCase() + "</p>";
             gifHolder.append(rated, img);
             $(".gif-results").append(gifHolder);
-        }
+        }console.log(response);
     });
 };
 
-//Adding new Gif buttons
+//Function when SEARCH button is pressed
 $("#gifSearch").on("click", function () {
     event.preventDefault();
     var newGif = $("#userInput").val().trim();
     giphy.push(newGif);
     $("#gif-buttons").empty();
     gifButtons();
-    console.log(newGif);
 })
 
+//Algorithm for GIF button clicked to print to HTML
 $("#gif-buttons").on("click", ".searchGif", function () {
     $(".gif-results").empty();
     var searchWord = $(this).attr("id");
     searchGiphs(searchWord);
 });
+
+//Starting and stopping GIfs once printed to HTML
+$(".gif-results").on("click", ".gifImg", function () {
+    var start = $(this).attr("data-moving");
+    var pause = $(this).attr("src");
+    $(this).attr("src", start);
+    $(this).attr("data-moving", pause);
+})
 
 })
